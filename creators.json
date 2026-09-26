@@ -1,0 +1,11 @@
+{
+  "_comment": "Source creators for the reaction channel. n8n iterates this list daily (or on demand) and runs run_pipeline.py --creator <handle>. Add handles as @Name or plain Name.",
+  "creators": [
+    { "handle": "CalebHammer", "note": "Financial Audit — the benchmark show, densest bad-decision reveals" }
+  ],
+  "search_queries": [
+    "financial audit",
+    "couples financial audit",
+    "financial planning reveal"
+  ]
+}

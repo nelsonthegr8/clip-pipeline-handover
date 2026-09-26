@@ -1,0 +1,5 @@
+# Python deps for the clip pipeline (system python3, install with:
+#   pip install --break-system-packages -r requirements.txt
+# ffmpeg must also be installed (apt install ffmpeg)
+youtube-transcript-api>=1.0.0
+yt-dlp>=2026.08.19
