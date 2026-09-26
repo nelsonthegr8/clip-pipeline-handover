@@ -127,3 +127,8 @@ for any video the user finds themselves.
 
 Ask the user for: the Discord webhook URL(s) for notifications. Only if the
 GitHub clone fails: ask how to get the reference folder onto the box.
+
+**Optional add-on (Nextcloud upload):** after the three workflows are live and
+verified, the owner may ask to add Nextcloud uploads. In that case read
+`N8N_NEXTCLOUD_ADDENDUM.md` in this folder and follow it exactly (it contains
+verified WebDAV behavior for their Nextcloud instance — do not deviate from it).

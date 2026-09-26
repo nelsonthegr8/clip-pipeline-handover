@@ -167,6 +167,31 @@ carry a dollar amount.
 - **Signal density varies by episode** — report the clip COUNT and the dense-zone range,
   not just a flat list. Some episodes yield 5 beats, some 25+.
 
+## Clip-library storage (Nextcloud) — staging layout
+
+Cut clips are uploaded to the owner's Nextcloud as a **staging inbox**, then a
+curation step (done by the owner's Hermes agent, NOT n8n) promotes clips into
+per-video-idea folders. See `N8N_NEXTCLOUD_ADDENDUM.md` for the exact n8n nodes
+and verified WebDAV behavior (MKCOL before PUT; folders are NOT auto-created).
+
+```
+finance-channel/
+├── _inbox/                     ← n8n drops cut batches here (STAGING)
+│   └── <video_id>/
+│       ├── source.json         {video_id,title,channel,url,cut_at,clips[]}
+│       ├── clips.json          (pipeline beat output, verbatim)
+│       └── clipNN_HH-MM-HH-MM_slug.mp4
+└── NNN_<idea-slug>/            ← curation promotes clips into idea folders
+    ├── IDEA.md                 title + story-arc table + "My turn" advice + CTA
+    └── clips/
+        ├── clipNN_….mp4
+        └── clipNN_….md         per-clip sidecar: role, source, hook, transcript, angle
+```
+
+Keep pipeline output filenames EXACTLY (`clipNN_HH-MM-HH-MM_slug.mp4`) — the
+curation step maps filenames to transcript beats by the embedded timestamps.
+The `NNN_` prefix orders idea folders; each idea = one future reaction video.
+
 ## Suggested next steps (not yet built)
 
 - LLM title/hook generation per clip (for YT Shorts-style uploads).
