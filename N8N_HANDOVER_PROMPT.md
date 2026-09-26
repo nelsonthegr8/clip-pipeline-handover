@@ -1,14 +1,14 @@
 # Handover prompt for the n8n Setup Assistant
 
 > PASTE EVERYTHING BELOW (starting at "You are building…") into the n8n setup
-> assistant. Before you do:
-> 1. Copy the whole `clip-pipeline/` folder into your n8n instance so the assistant
->    can read it — bind-mount it into the n8n container at `/opt/clip-pipeline`
->    (if n8n is a container on the same Proxmox host: add the host path
->    `/home/nelsonthegr8/clip-pipeline` as a mount at `/opt/clip-pipeline`),
->    or scp it to `/opt/clip-pipeline` on the n8n server.
-> 2. Make sure the n8n container (or host) has: python3, pip, ffmpeg, and node.
->    If not, tell the assistant to install them as part of setup.
+> assistant. No file uploads needed — the assistant clones the reference code
+> itself from GitHub.
+>
+> The reference code lives at:
+> **https://github.com/nelsonthegr8/clip-pipeline-handover** (public, no auth)
+>
+> Make sure the n8n container (or host) has: git, python3, pip, ffmpeg, and node.
+> If any are missing, tell the assistant to install them as part of setup.
 
 ---
 
@@ -18,11 +18,12 @@ finance-niche YouTube videos and cut ~30-second clips from each, so the owner ca
 batch-record reaction videos (target: ~5 reactions per recording session, ~1 month
 of backlog). The benchmark channel for volume/format is @Tawktoembwoi.
 
-**A verified reference implementation already exists at `/opt/clip-pipeline`.**
-Read `HANDOVER.md` there FIRST — it documents the environment setup, the exact
-commands, the output JSON contract, the tuned detection algorithm, and known
-pitfalls. Then read `run_pipeline.py` and `beat_detect.py`. Your job is to wire
-n8n around that code, NOT to rewrite the detection logic.
+**A verified reference implementation will be cloned to `/opt/clip-pipeline`
+(setup step 0 below).** Read `HANDOVER.md` there FIRST — it documents the
+environment setup, the exact commands, the output JSON contract, the tuned
+detection algorithm, and known pitfalls. Then read `run_pipeline.py` and
+`beat_detect.py`. Your job is to wire n8n around that code, NOT to rewrite the
+detection logic.
 
 ## What the reference code does (one command, three modes)
 
@@ -43,7 +44,15 @@ Logs go to stderr; stdout is always one JSON object. Exit 0 = processed (see
 
 ## Setup step 1 — verify the environment (do this first, report what's missing)
 
-Run each via Execute Command (or ask the user):
+Step 0 — get the reference code (if not already present):
+```
+git clone https://github.com/nelsonthegr8/clip-pipeline-handover.git /opt/clip-pipeline
+ls /opt/clip-pipeline   # expect: HANDOVER.md, run_pipeline.py, beat_detect.py, creators.json, requirements.txt
+```
+(Repo is public, no auth. If git is missing or the clone fails, ask the user how
+to provide the folder.)
+
+Then run each via Execute Command (or ask the user):
 1. `python3 --version` and `node --version` — both must exist.
 2. `python3 -c "import youtube_transcript_api, yt_dlp"` — if this fails run:
    `pip install --break-system-packages -r /opt/clip-pipeline/requirements.txt`
@@ -116,5 +125,5 @@ for any video the user finds themselves.
 3. WF 1 twice in a row → second run is a no-op (dedupe works).
 4. Show the user a sample Discord notification so they can approve the format.
 
-Ask the user for: the Discord webhook URL(s) for notifications, and confirmation
-of the mount path if `/opt/clip-pipeline` isn't visible.
+Ask the user for: the Discord webhook URL(s) for notifications. Only if the
+GitHub clone fails: ask how to get the reference folder onto the box.
